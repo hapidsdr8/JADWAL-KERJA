@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jadwal Shift Kerja</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+padding:20px;
+color:#fff;
+}
+
+.card{
+width:100%;
+max-width:420px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(15px);
+border-radius:20px;
+padding:30px;
+text-align:center;
+box-shadow:0 15px 35px rgba(0,0,0,.35);
+}
+
+h1{
+font-size:28px;
+margin-bottom:20px;
+}
+
+#tanggal{
+font-size:18px;
+color:#cbd5e1;
+margin-bottom:25px;
+}
+
+#status{
+font-size:30px;
+font-weight:bold;
+margin-bottom:20px;
+}
+
+.badge{
+display:inline-block;
+padding:12px 24px;
+border-radius:999px;
+font-weight:bold;
+margin-bottom:20px;
+}
+
+.kerja{
+background:#16a34a;
+}
+
+.libur{
+background:#dc2626;
+}
+
+#next{
+line-height:1.7;
+color:#e2e8f0;
+}
+
+.footer{
+margin-top:25px;
+font-size:13px;
+color:#94a3b8;
+}
+
+@media(max-width:500px){
+h1{font-size:24px;}
+#status{font-size:24px;}
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+
+<h1>📅 Jadwal Shift</h1>
+
+<div id="tanggal"></div>
+
+<div id="status"></div>
+
+<div class="badge" id="badge"></div>
+
+<div id="next"></div>
+
+<div class="footer">
+Update otomatis setiap hari
+</div>
+
+</div>
+
+<script>
+
+const baseDate=new Date(2026,7,7);
+const baseIndex=1;
+
+const shift=[
+"Kerja Pagi ke-1",
+"Kerja Pagi ke-2",
+"Kerja Pagi ke-3",
+"Kerja Pagi ke-4",
+"Libur ke-1",
+"Libur ke-2"
+];
+
+  const hari=[
+"Minggu",
+"Senin",
+"Selasa",
+"Rabu",
+"Kamis",
+"Jumat",
+"Sabtu"
+];
+
+const bulan=[
+"Januari",
+"Februari",
+"Maret",
+"April",
+"Mei",
+"Juni",
+"Juli",
+"Agustus",
+"September",
+"Oktober",
+"November",
+"Desember"
+];
+
+const today=new Date();
+
+today.setHours(0,0,0,0);
+baseDate.setHours(0,0,0,0);
+
+const diff=Math.floor((today-baseDate)/(1000*60*60*24));
+
+const index=((baseIndex+diff)%shift.length+shift.length)%shift.length;
+
+const status=shift[index];
+
+document.getElementById("tanggal").innerHTML=
+`${hari[today.getDay()]}, ${today.getDate()} ${bulan[today.getMonth()]} ${today.getFullYear()}`;
+
+document.getElementById("status").innerHTML=status;
+
+const badge=document.getElementById("badge");
+
+if(status.includes("Kerja")){
+badge.innerHTML="🟢 MASUK KERJA";
+badge.classList.add("kerja");
+}else{
+badge.innerHTML="🔴 LIBUR";
+badge.classList.add("libur");
+}
+  const besok=(index+1)%shift.length;
+
+document.getElementById("next").innerHTML=`
+<hr style="margin:20px 0;border:0;border-top:1px solid rgba(255,255,255,.15);">
+
+Hari ini kamu menjalani:<br><br>
+
+<b style="font-size:22px;">${status}</b>
+
+<br><br>
+
+Besok:<br>
+
+<b>${shift[besok]}</b>
+
+<br><br>
+
+Siklus Kerja:<br>
+Kerja Pagi 1 → Kerja Pagi 2 → Kerja Pagi 3 → Kerja Pagi 4 → Libur 1 → Libur 2 → Mengulang
+`;
+
+</script>
+
+</body>
+</html>
