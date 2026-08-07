@@ -87,6 +87,14 @@ h1{font-size:24px;}
 </head>
 <body>
 
+<audio id="musikKerja" loop>
+  <source src="Berdansa lahh.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="musikLibur" loop>
+  <source src="ngana so pigi.mp3" type="audio/mpeg">
+</audio>
+
 <div class="card">
 
 <h1>📅 Jadwal Shift</h1>
@@ -190,6 +198,14 @@ Siklus Kerja:<br>
 Kerja Pagi 1 → Kerja Pagi 2 → Kerja Pagi 3 → Kerja Pagi 4 → Libur 1 → Libur 2 → Mengulang
 `;
 
+  const musikKerja = document.getElementById("musikKerja");
+const musikLibur = document.getElementById("musikLibur");
+
+if (status.includes("Kerja")) {
+  musikKerja.play().catch(() => {});
+} else {
+  musikLibur.play().catch(() => {});
+}
 </script>
 
 </body>
