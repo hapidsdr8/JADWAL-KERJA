@@ -111,6 +111,10 @@ h1{font-size:24px;}
 Update otomatis setiap hari
 </div>
 
+<button id="tombolMusik" onclick="putarMusik()">
+🎵 Putar Musik
+</button>
+
 </div>
 
 <script>
@@ -205,6 +209,22 @@ if (status.includes("Kerja")) {
   musikKerja.play().catch(() => {});
 } else {
   musikLibur.play().catch(() => {});
+}
+function putarMusik() {
+  const musikKerja = document.getElementById("musikKerja");
+  const musikLibur = document.getElementById("musikLibur");
+
+  if (status.includes("Kerja")) {
+    musikLibur.pause();
+    musikKerja.currentTime = 0;
+    musikKerja.play();
+  } else {
+    musikKerja.pause();
+    musikLibur.currentTime = 0;
+    musikLibur.play();
+  }
+
+  document.getElementById("tombolMusik").innerHTML = "⏸️ Musik Berjalan";
 }
 </script>
 
