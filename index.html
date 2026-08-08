@@ -219,17 +219,12 @@ const badge=document.getElementById("badge");
 if (status.includes("Libur")) {
   badge.innerHTML = "🔵 LIBUR";
   badge.className = "badge libur";
-} else if (
-  (jam === 11 && menit >= 30) ||
-  (jam === 12)
-) {
-  badge.innerHTML = "⚪ ISTIRAHAT";
-  badge.className = "badge istirahat";
 } else {
   badge.innerHTML = "🟢 MASUK KERJA";
   badge.className = "badge kerja";
-               }
-  const besok=(index+1)%shift.length;
+}               
+  
+const besok=(index+1)%shift.length;
 
 document.getElementById("next").innerHTML=`
 <hr style="margin:20px 0;border:0;border-top:1px solid rgba(255,255,255,.15);">
