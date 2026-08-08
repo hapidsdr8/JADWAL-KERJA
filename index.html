@@ -222,22 +222,23 @@ if (status.includes("Kerja")) {
 } else {
   musikLibur.play().catch(() => {});
 }
+
 function putarMusik() {
   const musikKerja = document.getElementById("musikKerja");
   const musikLibur = document.getElementById("musikLibur");
+  const tombol = document.getElementById("tombolMusik");
 
-  if (status.includes("Kerja")) {
-    musikLibur.pause();
-    musikKerja.currentTime = 0;
-    musikKerja.play();
+  const musik = status.includes("Kerja") ? musikKerja : musikLibur;
+
+  if (musik.paused) {
+    musik.play();
+    tombol.innerHTML = "⏸️ Pause Musik";
   } else {
-    musikKerja.pause();
-    musikLibur.currentTime = 0;
-    musikLibur.play();
+    musik.pause();
+    tombol.innerHTML = "🎵 Putar Musik";
   }
-
-  document.getElementById("tombolMusik").innerHTML = "⏸️ Musik Berjalan";
 }
+  
 </script>
 
 </body>
