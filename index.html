@@ -80,6 +80,10 @@ background:#2563eb;
 .istirahat{
 background:#6b7280;
 }
+  
+  .off{
+background:#000000;
+}
 
 #jam{
 font-size:32px;
@@ -288,6 +292,13 @@ if (status.includes("Libur")) {
   document.getElementById("keterangan").innerHTML = "🔵 Hari libur — nikmati waktumu!";
   return;
 }
+  if (jam >= 20) {
+  badge.innerHTML = "⚫ OFF";
+  badge.className = "badge off";
+  document.getElementById("countdown").innerHTML = "";
+  document.getElementById("keterangan").innerHTML = "⚫ OFF";
+  return;
+  }
   if (jam >= 8 && (jam < 11 || (jam === 11 && menit < 30))) {
     target = new Date(sekarang);
     target.setHours(11, 30, 0, 0);
@@ -302,14 +313,14 @@ else if ((jam == 11 && menit >= 30) || (jam > 11 && jam < 13)) {
     target = new Date(sekarang);
     target.setHours(20, 0, 0, 0);
     keterangan = "Sisa waktu kerja";
-  } 
+    
   else {
-    document.getElementById("countdown").innerHTML = "";
-    document.getElementById("keterangan").innerHTML =
-      jam >= 20 ? "🟢 Jam kerja hari ini selesai" : "Menunggu jam masuk 08.00";
-    return;
-  }
-
+  document.getElementById("countdown").innerHTML = "";
+  document.getElementById("keterangan").innerHTML =
+    "Menunggu jam masuk 08.00";
+  return;
+      }
+  
   const selisih = target - sekarang;
 
   const jamSisa = Math.floor(selisih / 3600000);
