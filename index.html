@@ -74,7 +74,28 @@ background:#16a34a;
 }
 
 .libur{
-background:#dc2626;
+background:#2563eb;
+}
+
+.istirahat{
+background:#6b7280;
+}
+
+#jam{
+font-size:32px;
+font-weight:bold;
+margin-top:15px;
+}
+
+#countdown{
+font-size:20px;
+font-weight:bold;
+margin-top:10px;
+}
+
+#keterangan{
+font-size:15px;
+margin-top:8px;
 }
 
 #next{
@@ -112,12 +133,25 @@ h1{font-size:24px;}
 <div class="watermark">Created by Hapid</div>
 
 <div id="tanggal"></div>
+<div id="jam"></div>
+<div id="countdown"></div>
+<div id="keterangan"></div>
 
 <div id="status"></div>
+  
+<div id="jam"></div>
+<div id="countdown"></div>
+<div id="keterangan"></div>
 
 <div class="badge" id="badge"></div>
 
 <div id="next"></div>
+  
+<div id="jam"></div>
+
+<div id="countdown"></div>
+
+<div id="keterangan"></div>
 
 <div class="footer">
 Update otomatis setiap hari
@@ -238,6 +272,60 @@ function putarMusik() {
     tombol.innerHTML = "🎵 Putar Musik";
   }
 }
+function updateWaktu() {
+  const sekarang = new Date();
+
+  const jam = sekarang.getHours();
+  const menit = sekarang.getMinutes();
+  const detik = sekarang.getSeconds();
+
+  document.getElementById("jam").innerHTML =
+    sekarang.toLocaleTimeString("id-ID");
+
+  let target;
+  let keterangan = "";
+  
+if (status.includes("Libur")) {
+  document.getElementById("countdown").innerHTML = "";
+  document.getElementById("keterangan").innerHTML = "🔵 Hari libur — nikmati waktumu!";
+  return;
+}
+  if (jam >= 8 && (jam < 11 || (jam === 11 && menit < 30))) {
+    target = new Date(sekarang);
+    target.setHours(11, 30, 0, 0);
+    keterangan = "Sisa waktu kerja sebelum istirahat";
+  } 
+else if ((jam == 11 && menit >= 30) || (jam > 11 && jam < 13)) {
+    target = new Date(sekarang);
+    target.setHours(13, 0, 0, 0);
+    keterangan = "⚪ Sedang istirahat — kembali kerja pukul 13.00";
+  } 
+  else if (jam >= 13 && jam < 20) {
+    target = new Date(sekarang);
+    target.setHours(20, 0, 0, 0);
+    keterangan = "Sisa waktu kerja";
+  } 
+  else {
+    document.getElementById("countdown").innerHTML = "";
+    document.getElementById("keterangan").innerHTML =
+      jam >= 20 ? "🟢 Jam kerja hari ini selesai" : "Menunggu jam masuk 08.00";
+    return;
+  }
+
+  const selisih = target - sekarang;
+
+  const jamSisa = Math.floor(selisih / 3600000);
+  const menitSisa = Math.floor((selisih % 3600000) / 60000);
+  const detikSisa = Math.floor((selisih % 60000) / 1000);
+
+  document.getElementById("countdown").innerHTML =
+    `${jamSisa} jam ${menitSisa} menit ${detikSisa} detik`;
+
+  document.getElementById("keterangan").innerHTML = keterangan;
+}
+
+updateWaktu();
+setInterval(updateWaktu, 1000);
   
 </script>
 
