@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -78,6 +77,10 @@ h1 {
 .libur { background: #2563eb; }
 .istirahat { background: #6b7280; }
 .off { background: #000000; }
+.persiapan { 
+  background: #eab308; 
+  color: #000000; 
+}
 
 #countdown {
   font-size: 20px;
@@ -191,13 +194,6 @@ document.getElementById("tanggal").innerHTML =
 document.getElementById("status").innerHTML = status;
 
 const badge = document.getElementById("badge");
-if (status.includes("Libur")) {
-  badge.innerHTML = "🔵 LIBUR";
-  badge.className = "badge libur";
-} else {
-  badge.innerHTML = "🟢 MASUK KERJA";
-  badge.className = "badge kerja";
-}
 
 const besok = (index + 1) % shift.length;
 
@@ -229,7 +225,7 @@ function putarMusik() {
     musik.play().then(() => {
       tombol.innerHTML = "⏸️ Pause Musik";
     }).catch(() => {
-      alert("Gagal memutar audio! Pastikan file 'Berdansa lahh.mp3' dan 'ngana so pigi.mp3' berada di folder yang sama.");
+      alert("Gagal memutar audio! Pastikan file MP3 berada di folder yang sama.");
     });
   } else {
     musik.pause();
@@ -249,27 +245,41 @@ function updateWaktu() {
 
   // 1. Jika Status Hari Ini LIBUR
   if (status.includes("Libur")) {
+    badge.innerHTML = "🔵 LIBUR";
+    badge.className = "badge libur";
     document.getElementById("countdown").innerHTML = "";
     document.getElementById("keterangan").innerHTML = "🔵 Hari libur — nikmati waktumu!";
     return;
   }
 
-  // 2. Jam 20:00 ke atas (OFF)
-  if (jam >= 20) {
-    badge.innerHTML = "⚫ OFF";
+  // 2. Jam 00:00 - 07:29 (Belum Masuk Kerja)
+  if (jam < 7 || (jam === 7 && menit < 30)) {
+    badge.innerHTML = "⚫ BELUM MASUK";
     badge.className = "badge off";
     document.getElementById("countdown").innerHTML = "";
-    document.getElementById("keterangan").innerHTML = "⚫ Selesai jam kerja (OFF)";
+    document.getElementById("keterangan").innerHTML = "Menunggu jam masuk kerja (08.00)";
     return;
   }
 
-  // 3. Jam Kerja Pagi (08:00 - 11:29)
-  if (jam >= 8 && (jam < 11 || (jam === 11 && menit < 30))) {
+  // 3. Jam 07:30 - 07:59 (Persiapan Kerja - WARNA KUNING)
+  if (jam === 7 && menit >= 30) {
+    badge.innerHTML = "🟡 PERSIAPAN";
+    badge.className = "badge persiapan";
+    target = new Date(sekarang);
+    target.setHours(8, 0, 0, 0);
+    keterangan = "🟡 Persiapan masuk kerja dalam:";
+  }
+
+  // 4. Jam 08:00 - 11:29 (Kerja Pagi)
+  else if (jam >= 8 && (jam < 11 || (jam === 11 && menit < 30))) {
+    badge.innerHTML = "🟢 MASUK KERJA";
+    badge.className = "badge kerja";
     target = new Date(sekarang);
     target.setHours(11, 30, 0, 0);
     keterangan = "Sisa waktu kerja sebelum istirahat:";
   } 
-  // 4. Jam Istirahat (11:30 - 12:59)
+
+  // 5. Jam 11:30 - 12:59 (Istirahat)
   else if ((jam === 11 && menit >= 30) || jam === 12) {
     badge.innerHTML = "⚪ ISTIRAHAT";
     badge.className = "badge istirahat";
@@ -277,29 +287,33 @@ function updateWaktu() {
     target.setHours(13, 0, 0, 0);
     keterangan = "⚪ Sedang istirahat — kembali kerja pukul 13.00 dalam:";
   } 
-  // 5. Jam Kerja Siang (13:00 - 19:59)
+
+  // 6. Jam 13:00 - 19:59 (Kerja Siang)
   else if (jam >= 13 && jam < 20) {
     badge.innerHTML = "🟢 MASUK KERJA";
     badge.className = "badge kerja";
     target = new Date(sekarang);
     target.setHours(20, 0, 0, 0);
     keterangan = "Sisa waktu kerja hari ini:";
-  } 
-  // 6. Sebelum Jam Masuk (00:00 - 07:59)
-  else {
+  }
+
+  // 7. Jam 20:00 - 23:59 (Selesai Shift / OFF)
+  else if (jam >= 20) {
+    badge.innerHTML = "⚫ OFF";
+    badge.className = "badge off";
     document.getElementById("countdown").innerHTML = "";
-    document.getElementById("keterangan").innerHTML = "Menunggu jam masuk kerja (08.00)";
+    document.getElementById("keterangan").innerHTML = "⚫ Selesai jam kerja (OFF)";
     return;
   }
 
-  // Hitung Selisih Countdown
+  // Hitung Selisih Hitung Mundur (Countdown)
   const selisih = target - sekarang;
   const jamSisa = Math.floor(selisih / 3600000);
   const menitSisa = Math.floor((selisih % 3600000) / 60000);
   const detikSisa = Math.floor((selisih % 60000) / 1000);
 
   document.getElementById("countdown").innerHTML =
-    `${jamSisa} jam ${menitSisa} menit ${detikSisa} detik`;
+    `${jamSisa > 0 ? jamSisa + " jam " : ""}${menitSisa} menit ${detikSisa} detik`;
   document.getElementById("keterangan").innerHTML = keterangan;
 }
 
