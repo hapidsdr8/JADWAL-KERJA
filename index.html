@@ -134,7 +134,7 @@ h1 {
 </audio>
 
 <audio id="musikLibur" loop>
-  <source src="ngana so pigi.mp3" type="audio/mpeg">
+  <source src="nganaa so pigii.mp3" type="audio/mpeg">
 </audio>
 
 <div class="card">
@@ -194,7 +194,6 @@ document.getElementById("tanggal").innerHTML =
 document.getElementById("status").innerHTML = status;
 
 const badge = document.getElementById("badge");
-
 const besok = (index + 1) % shift.length;
 
 document.getElementById("next").innerHTML = `
@@ -224,8 +223,8 @@ function putarMusik() {
   if (musik.paused) {
     musik.play().then(() => {
       tombol.innerHTML = "⏸️ Pause Musik";
-    }).catch(() => {
-      alert("Gagal memutar audio! Pastikan file MP3 berada di folder yang sama.");
+    }).catch((err) => {
+      alert("Gagal memutar audio! Pastikan nama file audio di GitHub sudah cocok.");
     });
   } else {
     musik.pause();
