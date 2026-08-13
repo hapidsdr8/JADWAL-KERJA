@@ -21,6 +21,12 @@ body {
   min-height: 100vh;
   padding: 20px;
   color: #fff;
+  transition: background 0.5s ease;
+}
+
+/* Tema Khusus 17 Agustus Merah Putih */
+body.tema-17agustus {
+  background: linear-gradient(180deg, #991b1b 0%, #dc2626 40%, #7f1d1d 100%);
 }
 
 .card {
@@ -32,11 +38,71 @@ body {
   padding: 30px;
   text-align: center;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-h1 {
-  font-size: 28px;
+/* Tampilan Card Merah Putih */
+body.tema-17agustus .card {
+  background: rgba(15, 15, 15, 0.65);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+/* Banner Pita Merah Putih Atas */
+.banner-ri {
+  display: none;
+  background: linear-gradient(90deg, #dc2626 50%, #ffffff 50%);
+  color: #000;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  padding: 6px 0;
+  margin: -30px -30px 20px -30px;
+  border-bottom: 2px solid #fef08a;
+  text-shadow: 0 0 2px #fff;
+}
+
+body.tema-17agustus .banner-ri {
+  display: block;
+}
+
+/* Tulisan Utama HUT RI */
+.hut-title {
+  display: none;
+  font-size: 32px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 2px 2px 0px #b91c1c;
+  margin-bottom: 2px;
+}
+
+body.tema-17agustus .hut-title {
+  display: block;
+}
+
+.sub-header {
+  display: none;
+  font-size: 13px;
+  font-weight: bold;
+  color: #fef08a; /* Emas */
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+body.tema-17agustus .sub-header {
+  display: block;
+}
+
+h1.judul-biasa {
+  font-size: 26px;
   margin-bottom: 5px;
+}
+
+body.tema-17agustus h1.judul-biasa {
+  display: none;
 }
 
 .watermark {
@@ -45,6 +111,10 @@ h1 {
   color: #94a3b8;
   letter-spacing: 1px;
   opacity: 0.75;
+}
+
+body.tema-17agustus .watermark {
+  color: #f1f5f9;
 }
 
 #tanggal {
@@ -86,6 +156,11 @@ h1 {
   font-size: 20px;
   font-weight: bold;
   margin-top: 10px;
+  color: #38bdf8;
+}
+
+body.tema-17agustus #countdown {
+  color: #fef08a;
 }
 
 #keterangan {
@@ -121,7 +196,7 @@ h1 {
 }
 
 @media(max-width:500px){
-  h1 { font-size: 24px; }
+  .hut-title { font-size: 26px; }
   #status { font-size: 22px; }
 }
 </style>
@@ -129,8 +204,9 @@ h1 {
 </head>
 <body>
 
+<!-- Audio Player -->
 <audio id="musikKerja" loop>
-  <source src="Berdansa lahh.mp3" type="audio/mpeg">
+  <source id="sourceKerja" src="Berdansa lahh.mp3" type="audio/mpeg">
 </audio>
 
 <audio id="musikLibur" loop>
@@ -138,7 +214,14 @@ h1 {
 </audio>
 
 <div class="card">
-  <h1>📅 Jadwal Shift</h1>
+  <!-- Element Khusus 17 Agustus -->
+  <div class="banner-ri">REPUBLIK INDONESIA</div>
+  <div class="hut-title">🇮🇩 HUT RI KE-81 🇮🇩</div>
+  <div class="sub-header">DIRGAHAYU REPUBLIK INDONESIA</div>
+
+  <!-- Judul Tampilan Normal -->
+  <h1 class="judul-biasa" id="judul">📅 Jadwal Shift</h1>
+
   <div class="watermark">Created by Hapid</div>
 
   <div id="tanggal"></div>
@@ -162,7 +245,7 @@ h1 {
 </div>
 
 <script>
-const baseDate = new Date(2026, 7, 7); // 7 Agustus 2026
+const baseDate = new Date(2026, 7, 7); 
 const baseIndex = 1;
 
 const shift = [
@@ -188,6 +271,20 @@ const diff = Math.floor((today - baseDate) / (1000 * 60 * 60 * 24));
 const index = ((baseIndex + diff) % shift.length + shift.length) % shift.length;
 const status = shift[index];
 
+const isModeTes = false; 
+const is17Agustus = isModeTes || (today.getDate() === 17 && today.getMonth() === 7);
+
+if (is17Agustus) { 
+  document.body.classList.add("tema-17agustus");
+  // Otomatis ubah file lagu ke Indonesiansong.mp3 saat 17 Agustus
+  const audioKerja = document.getElementById("musikKerja");
+  const sourceKerja = document.getElementById("sourceKerja");
+  sourceKerja.src = "Indonesiansong.mp3";
+  audioKerja.load(); 
+} else {
+  document.body.classList.remove("tema-17agustus");
+}
+
 document.getElementById("tanggal").innerHTML =
   `${hari[today.getDay()]}, ${today.getDate()} ${bulan[today.getMonth()]} ${today.getFullYear()}`;
 
@@ -206,11 +303,6 @@ Hari ini kamu menjalani:<br>
 
 Besok:<br>
 <b>${shift[besok]}</b>
-
-<br><br>
-
-Siklus Kerja:<br>
-<small>Kerja Pagi 1 → Kerja Pagi 2 → Kerja Pagi 3 → Kerja Pagi 4 → Libur 1 → Libur 2</small>
 `;
 
 function putarMusik() {
@@ -218,13 +310,16 @@ function putarMusik() {
   const musikLibur = document.getElementById("musikLibur");
   const tombol = document.getElementById("tombolMusik");
 
-  const musik = status.includes("Kerja") ? musikKerja : musikLibur;
+  const musik = status.includes("Libur") ? musikLibur : musikKerja;
 
   if (musik.paused) {
+    musikKerja.pause();
+    musikLibur.pause();
+    
     musik.play().then(() => {
       tombol.innerHTML = "⏸️ Pause Musik";
     }).catch((err) => {
-      alert("Gagal memutar audio! Pastikan nama file audio di GitHub sudah cocok.");
+      alert("Gagal memutar audio! Pastikan file " + (status.includes("Libur") ? "nganaa so pigii.mp3" : (is17Agustus ? "Indonesiansong.mp3" : "Berdansa lahh.mp3")) + " sudah diupload ke GitHub.");
     });
   } else {
     musik.pause();
@@ -242,7 +337,6 @@ function updateWaktu() {
   let target;
   let keterangan = "";
 
-  // 1. Jika Status Hari Ini LIBUR
   if (status.includes("Libur")) {
     badge.innerHTML = "🔵 LIBUR";
     badge.className = "badge libur";
@@ -251,53 +345,37 @@ function updateWaktu() {
     return;
   }
 
-  // 2. Jam 00:00 - 07:29 (Belum Masuk Kerja)
   if (jam < 7 || (jam === 7 && menit < 30)) {
     badge.innerHTML = "⚫ BELUM MASUK";
     badge.className = "badge off";
-    document.getElementById("countdown").innerHTML = "";
-    document.getElementById("keterangan").innerHTML = "Menunggu jam masuk kerja (08.00)";
-    return;
-  }
-
-  // 3. Jam 07:30 - 07:59 (Persiapan Kerja - WARNA KUNING)
-  if (jam === 7 && menit >= 30) {
+    target = new Date(sekarang);
+    target.setHours(8, 0, 0, 0);
+    keterangan = "Menunggu jam masuk kerja (08.00):";
+  } else if (jam === 7 && menit >= 30) {
     badge.innerHTML = "🟡 PERSIAPAN";
     badge.className = "badge persiapan";
     target = new Date(sekarang);
     target.setHours(8, 0, 0, 0);
     keterangan = "🟡 Persiapan masuk kerja dalam:";
-  }
-
-  // 4. Jam 08:00 - 11:29 (Kerja Pagi)
-  else if (jam >= 8 && (jam < 11 || (jam === 11 && menit < 30))) {
+  } else if (jam >= 8 && (jam < 11 || (jam === 11 && menit < 30))) {
     badge.innerHTML = "🟢 MASUK KERJA";
     badge.className = "badge kerja";
     target = new Date(sekarang);
     target.setHours(11, 30, 0, 0);
     keterangan = "Sisa waktu kerja sebelum istirahat:";
-  } 
-
-  // 5. Jam 11:30 - 12:59 (Istirahat)
-  else if ((jam === 11 && menit >= 30) || jam === 12) {
+  } else if ((jam === 11 && menit >= 30) || jam === 12) {
     badge.innerHTML = "⚪ ISTIRAHAT";
     badge.className = "badge istirahat";
     target = new Date(sekarang);
     target.setHours(13, 0, 0, 0);
     keterangan = "⚪ Sedang istirahat — kembali kerja pukul 13.00 dalam:";
-  } 
-
-  // 6. Jam 13:00 - 19:59 (Kerja Siang)
-  else if (jam >= 13 && jam < 20) {
+  } else if (jam >= 13 && jam < 20) {
     badge.innerHTML = "🟢 MASUK KERJA";
     badge.className = "badge kerja";
     target = new Date(sekarang);
     target.setHours(20, 0, 0, 0);
     keterangan = "Sisa waktu kerja hari ini:";
-  }
-
-  // 7. Jam 20:00 - 23:59 (Selesai Shift / OFF)
-  else if (jam >= 20) {
+  } else if (jam >= 20) {
     badge.innerHTML = "⚫ OFF";
     badge.className = "badge off";
     document.getElementById("countdown").innerHTML = "";
@@ -305,7 +383,6 @@ function updateWaktu() {
     return;
   }
 
-  // Hitung Selisih Hitung Mundur (Countdown)
   const selisih = target - sekarang;
   const jamSisa = Math.floor(selisih / 3600000);
   const menitSisa = Math.floor((selisih % 3600000) / 60000);
