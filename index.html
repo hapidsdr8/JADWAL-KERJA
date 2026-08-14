@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jadwal Shift Kerja - Special 17 Agustus</title>
+<title>Jadwal Shift Kerja</title>
 
 <style>
 * {
@@ -300,11 +300,11 @@ const diff = Math.floor((today - baseDate) / (1000 * 60 * 60 * 24));
 const index = ((baseIndex + diff) % shift.length + shift.length) % shift.length;
 const status = shift[index];
 
-// --- SETTING KHUSUS UNTUK PAKSA MODE 17 AGUSTUS HARII INI ---
-const tes17Agustus = true; // Dipaksa aktif sekarang
+// Mode Tes (Set false agar mengikuti kalender asli)
+const tes17Agustus = false; 
 const tesUltah = false;
 
-// Cek Tanggal Event
+// Cek Tanggal Event Otomatis
 const is17Agustus = tes17Agustus || (today.getDate() === 17 && today.getMonth() === 7);
 const isUltah = tesUltah || (today.getDate() === 8 && today.getMonth() === 0);
 
@@ -318,7 +318,6 @@ if (is17Agustus) {
   document.getElementById("textTitle").innerHTML = "🇮🇩 HUT RI KE-81 🇮🇩";
   document.getElementById("textSubHeader").innerHTML = "DIRGAHAYU REPUBLIK INDONESIA";
   
-  // Memutar lagu Indonesiansong.mp3
   namaLaguAktif = "Indonesiansong.mp3";
   sourceKerja.src = namaLaguAktif;
   audioKerja.load();
