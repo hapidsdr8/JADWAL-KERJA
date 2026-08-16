@@ -361,7 +361,8 @@ function putarMusik() {
   const musikLibur = document.getElementById("musikLibur");
   const tombol = document.getElementById("tombolMusik");
 
-  const musik = status.includes("Libur") ? musikLibur : musikKerja;
+  // Jika sedang 17 Agustus atau Ulang Tahun, prioritaskan lagu event meskipun sedang libur
+  const musik = (is17Agustus || isUltah) ? musikKerja : (status.includes("Libur") ? musikLibur : musikKerja);
 
   if (musik.paused) {
     musikKerja.pause();
@@ -370,7 +371,7 @@ function putarMusik() {
     musik.play().then(() => {
       tombol.innerHTML = "⏸️ Pause Musik";
     }).catch((err) => {
-      alert("Gagal memutar audio! Pastikan file MP3 (" + (status.includes("Libur") ? "nganaa so pigii.mp3" : namaLaguAktif) + ") sudah diupload ke GitHub.");
+      alert("Gagal memutar audio! Pastikan file MP3 (" + ((is17Agustus || isUltah) ? namaLaguAktif : (status.includes("Libur") ? "nganaa so pigii.mp3" : "Berdansa lahh.mp3")) + ") sudah diupload ke GitHub.");
     });
   } else {
     musik.pause();
